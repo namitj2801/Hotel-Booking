@@ -6,6 +6,7 @@ import userModel from "../models/user.model.js";
 import { asyncHandler } from "../../utils/AsyncHandler.js";
 import ApiResponse from "../../utils/ApiResponse.js";
 import { ApiError } from "../../utils/ApiError.js";
+import JWT from "jsonwebtoken";
 
 const registerController = asyncHandler(async (req, res) => {
   // Destructure name, email, and password from the request body
@@ -59,6 +60,12 @@ const loginController = asyncHandler(async (req, res) => {
   if (!isPasswordValid) {
     throw new ApiError(401, "Invalid user credentials");
   }
+
+  // Generate a new token
+  // Look here from chai and code
+  const token = await JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 
   // Find the logged-in user and exclude the password from the result
   const loggedInUser = await userModel.findById(user._id).select("-password");
