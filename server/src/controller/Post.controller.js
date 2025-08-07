@@ -24,7 +24,7 @@ export const createPostController = async (req, res) => {
       !title ||
       !hotelLocation ||
       !description ||
-      //   !category ||
+      !category ||
       !images ||
       !guest ||
       !price ||
@@ -49,7 +49,7 @@ export const createPostController = async (req, res) => {
       title,
       hotelLocation,
       description,
-      //   category,
+      category,
       images: images,
       isAvailable,
       guest: guest,
@@ -83,5 +83,89 @@ export const getPostController = async (req, res) => {
   } catch (error) {
     console.log(error);
     throw new ApiError(500, `Error while getting post: ${error.message}`);
+  }
+};
+
+export const getAllPostsController = async (req, res) => {
+  try {
+    const posts = await Post.find({});
+    return res
+      .status(200)
+      .json(new ApiResponse(200, posts, "All posts fetched succesfully"));
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Error while getting all the posts");
+  }
+};
+
+export const updatePostController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      title,
+      hotelLocation,
+      description,
+      facilities,
+      nearArea,
+      category,
+      guest,
+      isAvailable,
+      price,
+    } = req.body;
+    const files = req.files?.images;
+    const post = await Post.findById(id);
+    if (!post) {
+      throw new ApiError(404, "Post not found");
+    }
+    //validate the fields
+    if (
+      !hotelLocation &&
+      !files &&
+      !description &&
+      !category &&
+      !guest &&
+      !price &&
+      !nearArea &&
+      !facilities &&
+      !isAvailable === undefinedf
+    ) {
+      throw new ApiError(400, "Please provide fields to update");
+    }
+
+    //handle image update
+    // Not writing right now
+    // DO it later
+
+    const updatePost = await Post.findByIdAndUpdate(id, {
+      ...(title && { title }),
+      ...(hotelLocation && { hotelLocation }),
+      ...(description && { description }),
+      ...(facilities && { facilities }),
+      ...(nearArea && { nearArea }),
+      ...(category && { category }),
+      ...(guest && { guest }),
+      ...(isAvailable !== undefined && { isAvailable }),
+      ...(price && { price }),
+      ...(title && { slug: slug(title, { lower: true }) }),
+    });
+    await updatePost.save();
+    return res
+      .status(200)
+      .json(new ApiResponse(200, updatePost, "Post updated succesfully"));
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Error while updating post");
+  }
+};
+
+export const deletePostController = async (req, res) => {
+  try {
+    await Post.findByIdAndDelete(req.params._id);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Post deleted succesfully"));
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Error while deleting post");
   }
 };
