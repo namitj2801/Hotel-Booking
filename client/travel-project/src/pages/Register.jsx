@@ -4,20 +4,21 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-  const [username, setUsername] = React.useState("");
+  const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+  // const [confirmPassword, setConfirmPassword] = React.useState("");
   const [error, setError] = React.useState("");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    setError("");
+    // if (password !== confirmPassword) {
+    //   setError("Passwords do not match");
+    //   return;
+    // }
 
     if (!name || !email || !password) {
       setError("Please fill in all fields");
@@ -37,9 +38,12 @@ const Register = () => {
       toast.success("Registered Successfully");
       navigate("/login");
     } catch (error) {
-      setError("Error registering");
-      toast.error("Register failed");
-      console.log(error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "An error occurred during registration.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      console.error("Registration error:", error);
     }
   };
 
@@ -55,7 +59,7 @@ const Register = () => {
               Name
             </label>
             <input
-              type="name"
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="mt-1 block w-full px-3 py-3 border bg-white text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
@@ -79,25 +83,14 @@ const Register = () => {
               className="mt-1 block w-full px-3 py-3 border bg-white text-black border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          {/* <div className="flex items-center justify-between pb-3">
-            <label className="flex items-center ">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <span className="ml-2 text-sm text-gray-700 ">
-                Keep me signed in
-              </span>
-            </label>
-            <a href="" className="text-sm text-indigo-600 hover:underline">
-              Forget Password
-            </a>
-          </div> */}
+          {error && (
+            <p className="text-red-500 text-center text-sm mb-4">{error}</p>
+          )}
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 "
           >
-            Login
+            Sign Up
           </button>
         </form>
         <p className="text-center mt-4 text-sm text-gray-700">
