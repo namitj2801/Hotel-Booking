@@ -1,6 +1,7 @@
 // import { uploadImagesToCloudinary } from "../utils/cloudinary.js";
 // import cloudinary from "../config/Cloudinary.config.js";
 import { ApiError } from "../../utils/ApiError.js";
+import ApiResponse from "../../utils/ApiResponse.js";
 import { Post } from "../models/post.model.js";
 import slug from "slugify";
 
@@ -72,10 +73,15 @@ export const createPostController = async (req, res) => {
 };
 
 export const getPostController = async (req, res) => {
-    try {
-        
-    } catch (error) {
-        console.log(error);
-        throw new ApiError(500,"Error while getting post")
-    }
+  try {
+    const post = await Post.findOne({ slug: req.params.slug })
+      .select("-images")
+      .populate("category");
+    return res
+      .status(200)
+      .json(new ApiResponse(200, post, "Post fetched succesfully"));
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, `Error while getting post: ${error.message}`);
+  }
 };

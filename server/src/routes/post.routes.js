@@ -7,6 +7,6 @@ import {
 const postRoutes = express.Router();
 
 postRoutes.post("/create-post", createPostController);
-postRoutes.post("/get-post/:slug", getPostController);
+postRoutes.get("/get-post/:slug", getPostController);
 
 export default postRoutes;
