@@ -6,25 +6,28 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 // Define the schema for the User model
-const userModel = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
+const userModel = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user",
-  },
-});
+  { timestamps: true }
+);
 
 /**
  * Mongoose pre-save hook to hash the user's password before saving it to the database.

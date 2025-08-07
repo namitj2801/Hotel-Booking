@@ -8,6 +8,7 @@ import morgan from "morgan";
 // Import local modules
 import connectDB from "./src/config/db.config.js";
 import authRoutes from "./src/routes/user.routes.js";
+import postRoutes from "./src/routes/post.routes.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -32,6 +33,7 @@ app.get("/", (req, res) => {
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/post", postRoutes);
 
 // Start the server and listen for incoming requests
 app.listen(PORT, () => {
