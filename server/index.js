@@ -9,6 +9,7 @@ import morgan from "morgan";
 import connectDB from "./src/config/db.config.js";
 import authRoutes from "./src/routes/user.routes.js";
 import postRoutes from "./src/routes/post.routes.js";
+import fileUpload from "express-fileupload";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -23,6 +24,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
+app.use(
+  fileUpload({
+    useTempFiles: true,
+  })
+);
 
 // Define the port for the server to listen on
 const PORT = process.env.PORT || 3000;

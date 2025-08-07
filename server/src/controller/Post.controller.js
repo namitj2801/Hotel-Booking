@@ -1,5 +1,8 @@
 // import { uploadImagesToCloudinary } from "../utils/cloudinary.js";
-import cloudinary from "../config/Cloudinary.config.js";
+// import cloudinary from "../config/Cloudinary.config.js";
+import { ApiError } from "../../utils/ApiError.js";
+import { Post } from "../models/post.model.js";
+import slug from "slugify";
 
 export const createPostController = async (req, res) => {
   try {
@@ -7,22 +10,22 @@ export const createPostController = async (req, res) => {
       title,
       hotelLocation,
       description,
-      category,
+      //   category,
       images,
       isAvailable,
-      guests,
+      guest,
       price,
       nearArea,
       facilities,
     } = req.body;
-    const files = req.files?.images;
+
     if (
       !title ||
       !hotelLocation ||
       !description ||
-      !category ||
+      //   !category ||
       !images ||
-      !guests ||
+      !guest ||
       !price ||
       !nearArea ||
       !facilities ||
@@ -31,36 +34,33 @@ export const createPostController = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (!fies || files.length < 3) {
+    // The client is sending an array of URLs directly.
+    // If you were handling file uploads, you would need a middleware like 'multer'
+    // to populate req.files, and the client would need to send 'multipart/form-data'.
+    if (!Array.isArray(images) || images.length < 3) {
       return res
         .status(400)
         .json({ message: "At least 3 images are required" });
     }
-
-    // Upload images to cloud storage (e.g., Cloudinary)
-    // const uploadedImages = await uploadImagesToCloudinary(files);
-    const uploadedImages = await Promise.all(
-      files.map(async (file) => {
-        const result = await cloudinary.uploader.upload(file.path, {
-          folder: "posts",
-        });
-        return result.secure_url;
-      })
-    );
 
     // Create a new post with the provided data
     const post = new Post({
       title,
       hotelLocation,
       description,
-      category,
-      images: uploadedImages,
+      //   category,
+      images: images,
       isAvailable,
-      guest: guests,
+      guest: guest,
       price,
-      nearArea,
-      facilities,
-      slug: title.toLowerCase().replace(/ /g, "-"),
+      // Ensure nearArea is an array, even if a string is passed
+      nearArea: Array.isArray(nearArea)
+        ? nearArea
+        : nearArea.split(",").map((s) => s.trim()),
+      facilities: Array.isArray(facilities)
+        ? facilities
+        : facilities.split(",").map((s) => s.trim()),
+      slug: slug(title.toLowerCase().replace(/ /g, "-")),
     });
     await post.save();
 
@@ -69,4 +69,13 @@ export const createPostController = async (req, res) => {
     console.error("Error creating post:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const getPostController = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        console.log(error);
+        throw new ApiError(500,"Error while getting post")
+    }
 };

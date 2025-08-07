@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+// import { Schema } from "mongoose";
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -13,11 +14,11 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: "Category",
-    required: true,
-  },
+  //   category: {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "Category",
+  //     required: true,
+  //   },
   images: {
     type: [String],
     required: true,
@@ -53,6 +54,6 @@ const postSchema = new mongoose.Schema({
 });
 
 function arrayLimit(val) {
-  return val.length === 3;
+  return val.length >= 3;
 }
 export const Post = mongoose.model("Post", postSchema);
