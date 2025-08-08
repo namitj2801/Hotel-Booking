@@ -38,16 +38,16 @@ const Navbar = () => {
         </a>
       </div>
       {/* Notification and profile */}
-      <div className="flex items-center space-x-4 mr-[9rem] relative">
+      <div className="flex items-center space-x-4 mr-[9rem] relative cursor-pointer">
         <FaUser size={20} onClick={handleDropDownToggle} />
 
         {isDropDownOpen && (
           <div
-            className="absolute right-0 mt-36 w-48 bg-white-border border-gray-200 rounded shadow-lg z-50"
+            className="absolute right-0 mt-36 w-48 bg-white border border-gray-200 rounded shadow-lg z-50"
             onMouseLeave={closeDropDown}
           >
             <ul>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer ">
                 <a href="/" className="text-gray-600 hover:text-gray-900">
                   Your Profile
                 </a>
