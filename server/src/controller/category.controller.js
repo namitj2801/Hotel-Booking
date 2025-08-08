@@ -27,3 +27,17 @@ export const createCategoryController = async (req, res) => {
     throw new ApiError(500, "Error while creating category");
   }
 };
+
+export const getAllCategory = async (req, res) => {
+  try {
+    const categories = await Category.find({});
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, categories, "Categories retrieved successfully")
+      );
+  } catch (error) {
+    console.log(error);
+    throw new ApiError(500, "Error while fetching categories");
+  }
+};

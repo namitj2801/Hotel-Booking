@@ -10,6 +10,7 @@ import UserDashboard from "./pages/user/UserDashboard.jsx";
 import YourOrder from "./pages/user/YourOrder.jsx";
 import AdminRoutes from "./components/routes/Admin.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import CreatePost from "./pages/admin/CreatePost.jsx";
 
 function App() {
   return (
@@ -20,16 +21,17 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<HomePage />} />
-        
+
         {/* user routing */}
         <Route path="/user" element={<UserRoutes />}>
           <Route path="" element={<UserDashboard />} />
           <Route path="your-order" element={<YourOrder />} />
         </Route>
-        
+
         {/* admin routing */}
-        <Route path="/admin/details" element={<AdminRoutes />}>
-          <Route path="" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminRoutes />}>
+          <Route path="/admin/details" element={<AdminDashboard />} />
+          <Route path="/admin/create-post" element={<CreatePost />} />
         </Route>
       </Routes>
     </>
