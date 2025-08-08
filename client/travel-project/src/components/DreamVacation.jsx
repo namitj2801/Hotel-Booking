@@ -13,10 +13,10 @@ const DreamVacation = () => {
   ];
   return (
     <div className="flex flex-col mt-14">
-      <h1 className="text-3xl font-semibold mb-2 ml-[12rem] ">
+      <h1 className="text-3xl font-semibold mb-2 ml-[10rem] ">
         Enjoy your dream vacation
       </h1>
-      <p className="text-gray-600 mb-10 max-w-xl ml-[12rem] ">
+      <p className="text-gray-600 mb-10 max-w-xl ml-[10rem] ">
         Plan and book your perfect trip with export adivve, travel trips,
         destination information and inspiration from us
       </p>
