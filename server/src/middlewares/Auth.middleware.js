@@ -1,15 +1,46 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/user.js";
-import ApiError from "../../utils/ApiError.js";
+import userModel from "../models/user.model.js";
+import { ApiError } from "../../utils/ApiError.js";
 
 //Protect route based on token
 export const requireSignIn = async (req, res, next) => {
   try {
-    const decode = jwt.verify(req.header.authorization, process.env.JWT_SECRET);
-    req.User = decode;
+    const authHeader = req.headers.authorization;
+    console.log("Authorization Header:", authHeader);
+
+    if (!authHeader) {
+      return res
+        .status(401)
+        .send({ success: false, message: "Authorization header is missing" });
+    }
+
+    // Support for both "Bearer <token>" and token without "Bearer" prefix
+    const token = authHeader.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : authHeader;
+    if (!token) {
+      return res
+        .status(401)
+        .send({ success: false, message: "No token provided" });
+    }
+
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Token Object:", decode);
+
+    if (!decode._id && !decode.id) {
+      return res
+        .status(401)
+        .send({ success: false, message: "Token does not contain user ID" });
+    }
+
+    req.user = decode;
     next();
   } catch (error) {
     console.log(error);
+    res.status(401).send({
+      success: false,
+      message: "Authentication failed, please login again.",
+    });
   }
 };
 
@@ -17,13 +48,35 @@ export const requireSignIn = async (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findById(req.User._id).select("role");
-    if (user.role !== "admin") {
-      throw new ApiError(401, "unauthorized");
-    } else {
-      next();
+    const userId = req.user?._id || req.user.id;
+    console.log("User ID from token:", userId);
+    if (!userId) {
+      return res
+        .status(401)
+        .send({ success: false, message: "No user ID found in token" });
     }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .send({ success: false, message: "User not found in database" });
+    }
+
+    console.log("User from database:", user.name);
+    if (user?.role !== "admin") {
+      return res.status(401).send({
+        success: false,
+        message: "Unauthorized Access",
+      });
+    }
+    next();
   } catch (error) {
-    console.log(error);
+    console.error("Error in admin middleware:", error);
+    res.status(401).send({
+      success: false,
+      message: "Error in admin middleware",
+      error: error.message,
+    });
   }
 };

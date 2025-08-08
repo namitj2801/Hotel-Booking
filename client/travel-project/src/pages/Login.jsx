@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/UserContext";
@@ -13,26 +13,27 @@ const Login = () => {
   // const [loading, setLoading] = useState(false);
   //suggest
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEmail("");
 
     try {
-      const response = await axios.post(
+      const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
         { email, password }
       );
       toast.success("Login succesful");
       setAuth({
         ...auth,
-        token: response.data?.token,
-        user: response.data?.user,
+        token: res.data?.token,
+        user: res.data?.user,
       });
-      localStorage.setItem("auth", JSON.stringify(response.data));
-      navigate("/");
+      localStorage.setItem("auth", JSON.stringify(res.data));
+      navigate(location.state || "/");
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error?.res?.data?.message || "Login failed");
       toast.error("Login failed, Please try again");
       console.log(error);
     }

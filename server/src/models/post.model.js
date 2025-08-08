@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 // import { Schema } from "mongoose";
+import slugify from "slugify";
 
 const postSchema = new mongoose.Schema({
   title: {
@@ -51,6 +52,13 @@ const postSchema = new mongoose.Schema({
     type: String,
     lowercase: true,
   },
+});
+
+postSchema.pre("save", function (next) {
+  if (this.isModified("title")) {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
+  next();
 });
 
 function arrayLimit(val) {

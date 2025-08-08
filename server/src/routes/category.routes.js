@@ -1,8 +1,8 @@
 import express from "express";
 import { createCategoryController } from "../controller/category.controller.js";
 
-const app = express();
+const router = express.Router();
 
-app.post("/create-category", createCategoryController);
+router.post("/create-category", createCategoryController);
 
-export default app;
+export default router;

@@ -63,16 +63,28 @@ const loginController = asyncHandler(async (req, res) => {
 
   // Generate a new token
   // Look here from chai and code
-  const token = await JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
+  const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
   // Find the logged-in user and exclude the password from the result
-  const loggedInUser = await userModel.findById(user._id).select("-password");
+  // const loggedInUser = await userModel.findById(user._id).select("-password");
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, loggedInUser, "User logged in successfully"));
+  // return res
+  //   .status(200)
+  //   .json(new ApiResponse(200, loggedInUser, "User logged in successfully"));
+
+  res.status(200).send({
+    success: true,
+    message: "Logged in successfully",
+    token,
+    user: {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      id: user._id,
+    },
+  });
 });
 
 export { registerController, loginController };

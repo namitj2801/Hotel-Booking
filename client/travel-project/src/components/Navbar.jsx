@@ -1,74 +1,107 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUser } from "react-icons/fa";
 import logo from "../assets/logo (2).png";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/UserContext";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
-  const isSignIn = true;
+  const [auth, setAuth] = useAuth();
+  const navigate = useNavigate();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  //   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  const handleLogout = () => {
+    setAuth({ user: null, token: "" });
+    localStorage.removeItem("auth");
+    closeDropDown();
+    navigate("/login");
+    toast.success("Logged out successfully");
+  };
+
   const handleDropDownToggle = () => {
     setIsDropDownOpen(!isDropDownOpen);
   };
   const closeDropDown = () => {
     setIsDropDownOpen(false);
   };
+
+  const handleRedirect = () => {
+    if (auth.user.role === "admin") {
+      navigate("/admin/details");
+    } else {
+      navigate("/user");
+    }
+  };
   return (
     <nav className="flex items-center justify-between p-4">
       {/* Brand logo*/}
-      <div className="flex items-center space-x-2">
-        <img src={logo} alt="Logo" className="ml-7rem"></img>
-      </div>
+      <Link to="/" className="flex items-center space-x-2">
+        <img src={logo} alt="Logo" className="ml-[7rem]"></img>
+      </Link>
       {/* Navbar links */}
       <div className="hidden md:flex space-x-6">
-        <a href="/" className="text-gray-600 hover:text-gray-900">
+        <Link to="/" className="text-gray-600 hover:text-gray-900">
           Home
-        </a>
-        <a href="/" className="text-gray-600 hover:text-gray-900">
+        </Link>
+        <Link to="/discover" className="text-gray-600 hover:text-gray-900">
           Discover
-        </a>
-        <a href="/" className="text-gray-600 hover:text-gray-900">
+        </Link>
+        <Link to="/activities" className="text-gray-600 hover:text-gray-900">
           Activities
-        </a>
-        <a href="/" className="text-gray-600 hover:text-gray-900">
+        </Link>
+        <Link to="/contact" className="text-gray-600 hover:text-gray-900">
           Contact us
-        </a>
-        <a href="/" className="text-gray-600 hover:text-gray-900">
+        </Link>
+        <Link to="/about" className="text-gray-600 hover:text-gray-900">
           About
-        </a>
+        </Link>
       </div>
       {/* Notification and profile */}
       <div className="flex items-center space-x-4 mr-[9rem] relative cursor-pointer">
         <FaUser size={20} onClick={handleDropDownToggle} />
 
         {isDropDownOpen && (
-          <div
-            className="absolute right-0 mt-36 w-48 bg-white border border-gray-200 rounded shadow-lg z-50"
-            onMouseLeave={closeDropDown}
-          >
+          <div className="absolute right-0 mt-36 w-48 bg-white border border-gray-200 rounded shadow-lg z-50">
             <ul>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer ">
-                <a href="/" className="text-gray-600 hover:text-gray-900">
-                  Your Profile
-                </a>
-              </li>
-              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                <a href="/" className="text-gray-600 hover:text-gray-900">
-                  Your Order
-                </a>
-              </li>
-              {isSignIn ? (
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <a href="/" className="text-gray-600 hover:text-gray-900">
-                    Sign Out
-                  </a>
-                </li>
+              {auth?.token ? (
+                <>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/user"
+                      // onClick={closeDropDown}
+                      onClick={(e) => {
+                        e.preventDefault(); // stop auto navigation
+                        handleRedirect();
+                        closeDropDown();
+                      }}
+                      className="block"
+                    >
+                      Your Profile
+                    </Link>
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    <button onClick={handleLogout} className="w-full text-left">
+                      Sign Out
+                    </button>
+                  </li>
+                </>
               ) : (
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <a href="/" className="text-gray-600 hover:text-gray-900">
-                    Sign In
-                  </a>
-                </li>
+                <>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    <Link to="/login" onClick={closeDropDown} className="block">
+                      Sign In
+                    </Link>
+                  </li>
+                  <li className="px-4 py-2 hover:bg-gray-100">
+                    <Link
+                      to="/register"
+                      onClick={closeDropDown}
+                      className="block"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </div>

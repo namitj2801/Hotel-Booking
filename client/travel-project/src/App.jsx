@@ -4,7 +4,12 @@ import Navbar from "./components/navbar.jsx";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register.jsx";
-import HomePage from "./HomePage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import UserRoutes from "./components/routes/Private.jsx";
+import UserDashboard from "./pages/user/UserDashboard.jsx";
+import YourOrder from "./pages/user/YourOrder.jsx";
+import AdminRoutes from "./components/routes/Admin.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 
 function App() {
   return (
@@ -15,6 +20,17 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<HomePage />} />
+        
+        {/* user routing */}
+        <Route path="/user" element={<UserRoutes />}>
+          <Route path="" element={<UserDashboard />} />
+          <Route path="your-order" element={<YourOrder />} />
+        </Route>
+        
+        {/* admin routing */}
+        <Route path="/admin/details" element={<AdminRoutes />}>
+          <Route path="" element={<AdminDashboard />} />
+        </Route>
       </Routes>
     </>
   );
