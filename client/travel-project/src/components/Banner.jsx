@@ -14,8 +14,8 @@ const Banner = () => {
       <div className="relative z-10 flex flex-col items-center justify-center text-white h-full px-4">
         <h1 className="text-4xl font-bold mb-4">Welcome to our website</h1>
         <p className="text-base sm:text-lg mt-2 text-center">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-          ducimus corporis, numquam doloribus,
+          Plan and book your perfect trip with expert advice, travel tips,
+          destination information, and inspiration from us.
         </p>
         {/* Search Bar */}
         <div className="flex items-center justify-center mt-8 w-full max-w-[55rem] sm:w-[80%] md:w-[60%] bg-white p-3 rounded-lg shadow-lg space-x-4">

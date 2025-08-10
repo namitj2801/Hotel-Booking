@@ -4,6 +4,7 @@ import logo from "../assets/logo (2).png";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/UserContext";
 import { toast } from "react-toastify";
+import { IoIosHeartEmpty } from "react-icons/io";
 
 const Navbar = () => {
   const [auth, setAuth] = useAuth();
@@ -25,7 +26,8 @@ const Navbar = () => {
     setIsDropDownOpen(false);
   };
 
-  const handleRedirect = () => {
+  const handleRedirect = (e) => {
+    e.preventDefault();
     if (auth.user.role === "admin") {
       navigate("/admin/details");
     } else {
@@ -58,6 +60,11 @@ const Navbar = () => {
       </div>
       {/* Notification and profile */}
       <div className="flex items-center space-x-4 mr-[9rem] relative cursor-pointer">
+        <IoIosHeartEmpty
+          size={20}
+          className="cursor-pointer"
+          onClick={() => navigate("/cart")}
+        />
         <FaUser size={20} onClick={handleDropDownToggle} />
 
         {isDropDownOpen && (
