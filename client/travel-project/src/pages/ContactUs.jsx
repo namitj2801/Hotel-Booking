@@ -4,7 +4,7 @@ const Contact = () => {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       {/* Title */}
-      <h1 className="text-4xl font-bold text-gray-900 mb-6">Contact Us</h1>
+      <h1 className="text-4xl font-bold text-blue-700 mb-6">Contact Us</h1>
       <p className="text-gray-600 mb-12">
         We’d love to hear from you! Whether you have a question, feedback, or
         need support with your booking, our team is here to help.

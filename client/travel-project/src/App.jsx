@@ -27,6 +27,8 @@ import SearchPage from "./pages/SearchPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/ContactUs.jsx";
+import Discover from "./pages/Discover.jsx";
+import Activities from "./pages/Activities.jsx";
 
 function App() {
   return (
@@ -45,6 +47,8 @@ function App() {
         <Route path="/category/:slug" element={<SelectedCategory />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/activities" element={<Activities />} />
 
         {/* user routing */}
         <Route path="/user" element={<UserRoutes />}>

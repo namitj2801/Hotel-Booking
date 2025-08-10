@@ -8,7 +8,7 @@ const About = () => {
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-blue-700">
           About My Dream Place
         </h1>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600">
+        <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-500">
           Your gateway to unforgettable stays, seamless bookings, and cherished
           travel memories.
         </p>
@@ -33,13 +33,13 @@ const About = () => {
             satisfaction.
           </p>
         </div>
-        <div>
+        {/* <div>
           <img
             src="https://via.placeholder.com/500x350"
             alt="Our Story"
             className="rounded-xl shadow-lg w-full object-cover"
           />
-        </div>
+        </div> */}
       </section>
 
       {/* Mission */}
