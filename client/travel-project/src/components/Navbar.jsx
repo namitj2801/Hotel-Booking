@@ -26,8 +26,8 @@ const Navbar = () => {
     setIsDropDownOpen(false);
   };
 
-  const handleRedirect = (e) => {
-    e.preventDefault();
+  const handleRedirect = () => {
+    // e.preventDefault();
     if (auth.user.role === "admin") {
       navigate("/admin/details");
     } else {

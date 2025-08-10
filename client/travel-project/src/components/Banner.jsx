@@ -1,8 +1,35 @@
 import React from "react";
 // import { FaMapMarkerAlt, FaCalenderAlt } from "react-icons/fa";
 import BannerImage from "../assets/Rectangle 2.png";
+import SearchPage from "../pages/SearchPage";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useSearch } from "../context/Search";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
+  const navigate = useNavigate();
+  const [search, setSearch] = useSearch();
+
+  const handelSearch = async (e) => {
+    e.preventDefault();
+    if (!search.keyword) {
+      console.error("Search keyword is missing");
+      return;
+    }
+    try {
+      navigate("/search");
+      const url = `${import.meta.env.VITE_BASE_URL}/api/booking/search/${
+        search.keyword
+      }`;
+      console.log("Requesting:", url);
+      const { data } = await axios.get(url);
+      setSearch({ ...search, results: data });
+    } catch (error) {
+      console.error("Error during search API call:", error);
+    }
+  };
+
   return (
     <div
       className="relative w-full h-[500px] bg-cover bg-center"
@@ -23,8 +50,13 @@ const Banner = () => {
             type="text"
             className="flex-grow p-2 border-gray-300 rounded-md text-black focus:outline-none focus:ring-blue-500 bg-white"
             placeholder="Search destination"
+            value={search.keyword}
+            onChange={(e) => setSearch({ ...search, keyword: e.target.value })}
           ></input>
-          <button className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition">
+          <button
+            onClick={handelSearch}
+            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition"
+          >
             Search
           </button>
         </div>
