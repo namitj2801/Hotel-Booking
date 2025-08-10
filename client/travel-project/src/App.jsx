@@ -25,6 +25,8 @@ import Advertisement from "./components/Advertisement.jsx";
 import Footer from "./components/Footer.jsx";
 import SearchPage from "./pages/SearchPage.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import About from "./pages/About.jsx";
+import Contact from "./pages/ContactUs.jsx";
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/thank-you" element={<ThankYou />} />
         <Route path="/category/:slug" element={<SelectedCategory />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
 
         {/* user routing */}
         <Route path="/user" element={<UserRoutes />}>
