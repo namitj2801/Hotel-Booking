@@ -11,7 +11,7 @@ export const createPostController = async (req, res) => {
       title,
       hotelLocation,
       description,
-      //   category,
+      category,
       images,
       isAvailable,
       guest,
@@ -27,10 +27,10 @@ export const createPostController = async (req, res) => {
       !category ||
       !images ||
       !guest ||
-      !price ||
+      price == null ||
       !nearArea ||
-      !facilities ||
-      !isAvailable
+      !facilities
+      // !isAvailable
     ) {
       return res.status(400).json({ message: "All fields are required" });
     }
